@@ -2,8 +2,12 @@
 
 session_start();
 
+$img_size = [100,30];
+
+$width = $img_size[0];
+$height = $img_size[1];
 $_SESSION["captcha"] = mt_rand(1000, 9999);
-$img = imagecreate(100, 30);
+$img = imagecreate($width, $height);
 $font_folder = $_SERVER["DOCUMENT_ROOT"] . "/fonts/captcha/";
 $fonts = array_diff(scandir($font_folder), array('..', '.'));
 
@@ -22,17 +26,17 @@ foreach ($captcha_array as $digit) {
     $size_max = 21; // 21
     $size = mt_rand($size_min, $size_max);
 
-    $x_min = 0 + $x_delta; // 0
-    $x_max = 25 - $size + $x_delta; // 50
+    $x_min = $x_delta; // 0
+    $x_max = $width / 4 - $size + $x_delta; // 50
     $x = mt_rand($x_min, $x_max);
 
     $y_min = $size; // 18
-    $y_max = 30; // 28
+    $y_max = $height; // 28
     $y = mt_rand($y_min, $y_max);
 
     imagettftext($img, $size, 0, $x, $y, $textcolor, $font, $digit);
 
-    $x_delta += 25;
+    $x_delta += $width / 4;
 }
 
 header("Content-type:image/jpeg");
